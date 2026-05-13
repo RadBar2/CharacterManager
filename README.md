@@ -5,6 +5,7 @@ This documentation outlines the design and implementation of the Character Manag
 The system is designed to manage a roster of game characters with varying roles (DPS, Sub-DPS, and Support). It utilizes a robust container system to organize these characters and evaluate their performance based on interchangeable strategies.
 
 ## UML Class Diagram
+```mermaid
 classDiagram
     %% Exceptions
     class std_runtime_error { <<external>> }
@@ -106,6 +107,7 @@ classDiagram
     CharacterTeam o-- TeamEvaluationStrategy : Uses Strategy
     CharacterTeam +- Iterator : Inner Class
     Impl o-- Character : Manages Clones
+```
 
 ## Make options
 1. **Build default target (module + demo)**
