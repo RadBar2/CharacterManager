@@ -1,0 +1,43 @@
+# Compiler and flags
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+
+# Objects required for both Demo and Test
+# Note: SupportCharacter.o is omitted because it has no code per requirements
+OBJS = Character.o DPSCharacter.o SubDPSCharacter.o CharacterTeam.o Strategy.o
+
+# Executables
+DEMO_EXE = demo
+TEST_EXE = test
+
+# Default target: build everything
+all: $(DEMO_EXE) $(TEST_EXE)
+
+# Link Demo Executable
+$(DEMO_EXE): demo.o $(OBJS)
+	$(CXX) $(CXXFLAGS) demo.o $(OBJS) -o $(DEMO_EXE)
+
+# Link Test Executable
+$(TEST_EXE): test.o $(OBJS)
+	$(CXX) $(CXXFLAGS) test.o $(OBJS) -o $(TEST_EXE)
+
+# Compile individual .cpp files into .o files
+%.o: %.cpp Character.h CharacterTeam.h Strategy.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Run commands
+run: $(DEMO_EXE)
+	./$(DEMO_EXE)
+
+run-test: $(TEST_EXE)
+	./$(TEST_EXE)
+
+# Clean generated files
+clean:
+	rm -f *.o $(DEMO_EXE) $(TEST_EXE)
+
+# Rebuild from scratch
+rebuild: clean all
+
+# Phony targets to prevent conflicts with files of the same name
+.PHONY: all run run-test clean rebuild
