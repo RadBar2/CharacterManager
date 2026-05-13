@@ -6,7 +6,7 @@ The system is designed to manage a roster of game characters with varying roles 
 
 ## UML Class Diagram
 ```mermaid
-classDiagram
+    classDiagram
     %% Exceptions
     class std_runtime_error { <<external>> }
     class std_logic_error { <<external>> }
@@ -21,20 +21,15 @@ classDiagram
     std_runtime_error <|-- StrategyNotSet
     std_logic_error <|-- NotImplementedException
 
-    %% Character Hierarchy (Prototype Pattern)
+    %% Character Hierarchy
     class Character {
         <<abstract>>
         #string name
         #int level
         #double baseStats
-        +Character(string n, int l, double stats)
-        +getName() string
-        +getLevel() int
-        +getBaseStats() double
         +clone()* Character
         +computeContribution()* double
         +performSpecialAction()
-        +operator<(Character) bool
     }
 
     class DPSCharacter {
@@ -65,47 +60,42 @@ classDiagram
     %% Strategy Pattern
     class TeamEvaluationStrategy {
         <<interface>>
-        +calculate(vector~Character*~) double*
+        +calculate(vector characters)* double
     }
 
     class TotalContributionStrategy {
-        +calculate(vector~Character*~) double
+        +calculate(vector characters) double
     }
 
     class MaxContributionStrategy {
-        +calculate(vector~Character*~) double
+        +calculate(vector characters) double
     }
 
     TeamEvaluationStrategy <|-- TotalContributionStrategy
     TeamEvaluationStrategy <|-- MaxContributionStrategy
 
-    %% CharacterTeam (Pimpl Idiom and Composition)
+    %% CharacterTeam and Pimpl
     class CharacterTeam {
         -Impl* pimpl
         -TeamEvaluationStrategy* currentStrategy
-        +CharacterTeam()
         +addCharacter(Character* c)
-        +removeCharacter(string name)
         +setStrategy(TeamEvaluationStrategy* s)
         +performEvaluation() double
-        +forEach(function callback)
-        +begin() Iterator
-        +end() Iterator
     }
 
     class Impl {
-        +vector~Character*~ members
+        +vector members
     }
 
     class Iterator {
         -vector_iterator iter
         +operator*() Character*
-        +operator++() Iterator
     }
 
+    %% Relationships
     CharacterTeam *-- Impl : Pimpl Idiom
     CharacterTeam o-- TeamEvaluationStrategy : Uses Strategy
-    CharacterTeam +- Iterator : Inner Class
+    CharacterTeam -- Iterator : Provides
     Impl o-- Character : Manages Clones
 ```
 
