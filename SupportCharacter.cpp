@@ -30,19 +30,15 @@
  * contribution formula used by DPS and SubDPS roles.
  */
 
- #include "Character.h"
+#include "Character.h"
 
 SupportCharacter::SupportCharacter(std::string n, int l, double stats, double bp)
     : Character(n, l, stats), buffPower(bp) {}
 
 Character* SupportCharacter::clone() const {
-    return new SupportCharacter(*this);
+    return new SupportCharacter(name, level, baseStats, buffPower);
 }
 
-/**
- * Implementation requirement: This specific subclass must throw 
- * NotImplementedException to demonstrate hierarchy constraints.
- */
 double SupportCharacter::computeContribution() const {
     throw NotImplementedException();
 }

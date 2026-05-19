@@ -1,21 +1,20 @@
 #include "Character.h"
 #include <iostream>
 
-// Constructor calls the base class constructor first
 DPSCharacter::DPSCharacter(std::string n, int l, double stats, double cr, double cd)
     : Character(n, l, stats), critRate(cr), critDamage(cd) {}
 
-// Prototype Pattern implementation
+// Polymorphic copying using the Prototype Pattern
 Character* DPSCharacter::clone() const {
-    return new DPSCharacter(*this);
+    return new DPSCharacter(name, level, baseStats, critRate, critDamage);
 }
 
-// Polymorphic contribution logic
+// DPS contribution is calculated based on base stats and critical hit potential
 double DPSCharacter::computeContribution() const {
     return baseStats * (1.0 + (critRate * critDamage));
 }
 
-// Specific method for dynamic_cast targets
+// Unique method for DPS characters
 void DPSCharacter::unleashUltimate() const {
     std::cout << name << " performs an Ultimate Burst for massive damage!" << std::endl;
 }

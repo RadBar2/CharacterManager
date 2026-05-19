@@ -1,26 +1,14 @@
 #include "Character.h"
 
-/**
- * SubDPSCharacter Implementation
- * This class balances damage with utility/buffing capabilities.
- */
-
-// Constructor: Uses member initializer list
 SubDPSCharacter::SubDPSCharacter(std::string n, int l, double stats, double er, double util)
     : Character(n, l, stats), energyRecharge(er), utilityMultiplier(util) {}
 
-/**
- * Prototype Pattern: Polymorphic copying.
- */
+// Polymorphic copying using the Prototype Pattern
 Character* SubDPSCharacter::clone() const {
-    return new SubDPSCharacter(*this);
+    return new SubDPSCharacter(name, level, baseStats, energyRecharge, utilityMultiplier);
 }
 
-/**
- * Polymorphism: Second implementation of the virtual method.
- * Calculates contribution based on a balance of stats and energy recharge.
- */
+// SubDPS contribution is based on base stats multiplied by a utility multiplier
 double SubDPSCharacter::computeContribution() const {
-    // Balance formula: (stats * utility) + (energyRecharge bonus)
-    return (baseStats * utilityMultiplier) + (energyRecharge * 0.5);
+    return baseStats * utilityMultiplier;
 }

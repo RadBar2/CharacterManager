@@ -2,25 +2,18 @@
 #define CHARACTER_H
 
 #include <string>
-#include <iostream>
 #include <stdexcept>
 
 // --- Custom Exceptions ---
 
-/**
- * Custom exception for the Strategy pattern requirement.
- */
 class StrategyNotSet : public std::runtime_error {
 public:
-    StrategyNotSet() : std::runtime_error("Error: Team strategy has not been set.") {}
+    StrategyNotSet();
 };
 
-/**
- * Custom exception for the hierarchy requirement.
- */
 class NotImplementedException : public std::logic_error {
 public:
-    NotImplementedException() : std::logic_error("Functionality not available for this role.") {}
+    NotImplementedException();
 };
 
 // --- Base Class ---
@@ -32,50 +25,33 @@ protected:
     double baseStats;
 
 public:
-    /**
-     * Constructor declaration. 
-     * Implementation is in Character.cpp.
-     */
     Character(std::string n, int l, double stats);
-    
-    /**
-     * Virtual destructor.
-     * Set to = default here to resolve the conflict seen in image_e9d79d.png.
-     */
-    virtual ~Character() = default;
+    virtual ~Character() = default; // Virtual destructor for proper cleanup of derived classes
+
+    // Disable copy semantics to enforce unique ownership and prevent slicing
+    Character(const Character& other) = delete;
+    Character& operator=(const Character& other) = delete;
 
     // Getters
-    std::string getName() const { return name; }
-    int getLevel() const { return level; }
-    double getBaseStats() const { return baseStats; }
+    std::string getName() const;
+    int getLevel() const;
+    double getBaseStats() const;
 
-    /**
-     * Prototype Pattern: Pure virtual clone for polymorphic copying.
-     */
+    // Prototype Pattern
     virtual Character* clone() const = 0;
 
-    /**
-     * Polymorphism: Method to show unique role contributions.
-     */
+    // Polymorphism
     virtual double computeContribution() const = 0;
 
-    /**
-     * Dynamic cast target: Default no-op implementation.
-     */
-    virtual void performSpecialAction() const { /* Default no-op */ }
+    // Dynamic cast target
+    virtual void performSpecialAction() const;
 
     // operator< for sorting
-    bool operator<(const Character& other) const {
-        return this->name < other.name;
-    }
+    bool operator<(const Character& other) const;
 };
 
 // --- Descendant Classes ---
 
-/**
- * DPSCharacter: High damage focus.
- * Implementation of methods resides in DPSCharacter.cpp.
- */
 class DPSCharacter : public Character {
 private:
     double critRate;
@@ -87,10 +63,6 @@ public:
     void unleashUltimate() const;
 };
 
-/**
- * SubDPSCharacter: Balanced damage and utility.
- * Implementation of methods resides in SubDPSCharacter.cpp.
- */
 class SubDPSCharacter : public Character {
 private:
     double energyRecharge;
@@ -101,18 +73,12 @@ public:
     double computeContribution() const override;
 };
 
-/**
- * SupportCharacter: Buffing focus.
- * Implementation of methods resides in SupportCharacter.cpp.
- */
 class SupportCharacter : public Character {
 private:
     double buffPower;
 public:
     SupportCharacter(std::string n, int l, double stats, double bp);
     Character* clone() const override;
-    
-    // Implementation in .cpp must throw NotImplementedException
     double computeContribution() const override;
 };
 

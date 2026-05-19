@@ -3,16 +3,13 @@
 
 #include "Character.h"
 #include "Strategy.h"
-#include <vector>
 #include <iterator>
 #include <functional>
 
 class CharacterTeam {
 private:
-    // Pimpl Idiom: Hide implementation details in the .cpp file
     struct Impl;
     Impl* pimpl;
-
     TeamEvaluationStrategy* currentStrategy;
 
 public:
@@ -24,20 +21,20 @@ public:
     CharacterTeam& operator=(const CharacterTeam& other);
 
     // CRUD Operations
-    void addCharacter(Character* c); // Takes ownership or clones
+    void addCharacter(Character* c); 
     void removeCharacter(const std::string& name);
 
     // Strategy Pattern Methods
-    void setStrategy(TeamEvaluationStrategy* strategy); // [cite: 28, 30]
-    double performEvaluation() const; // [cite: 28, 29]
+    void setStrategy(TeamEvaluationStrategy* strategy); 
+    double performEvaluation() const; 
 
     // Callback functionality
-    void forEach(std::function<void(Character*)> callback); // [cite: 31, 32]
+    void forEach(std::function<void(Character*)> callback); 
 
-    // Custom Iterator Implementation (Forward Iterator Type)
+    // Custom Iterator
     class Iterator {
     private:
-        std::vector<Character*>::iterator iter;
+        Character** ptr;
     public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = Character*;
@@ -45,11 +42,11 @@ public:
         using pointer = Character**;
         using reference = Character*&;
 
-        Iterator(std::vector<Character*>::iterator it) : iter(it) {}
-        reference operator*() { return *iter; }
-        Iterator& operator++() { ++iter; return *this; }
-        bool operator!=(const Iterator& other) const { return iter != other.iter; }
-        bool operator==(const Iterator& other) const { return iter == other.iter; }
+        Iterator(Character** p);
+        reference operator*();
+        Iterator& operator++();
+        bool operator!=(const Iterator& other) const;
+        bool operator==(const Iterator& other) const;
     };
 
     Iterator begin();
